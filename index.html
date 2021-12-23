@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API CLIMA</title>
+    <script type="text/javascript" src='http://code.jquery.com/jquery-1.10.2.min.js'></script> 
+    <script>
+        $(document).ready(function(){
+            function crearUrl(ciudad){
+            return `http://api.openweathermap.org/data/2.5/weather?q=${ciudad}&&appid=93342d9a08ef4ccdd9a83a31eae43db2`
+            }
+            $('form').submit(function() {
+                // your code here (build up your url)
+                let ciudad = $('input').val();
+                url = crearUrl(ciudad);
+                $.get(url, function(res) {
+                // your code here
+                    $('#city').text(res.name+': '+res.weather[0].description);
+                    let temperatura = ((res.main.temp - 273.15) * 9/5 + 32);
+                    let temperaturados = temperatura.toFixed(3);
+                    $('#temp').text('Temperature: '+temperaturados+' F');
+                    $('#coor').text('Coord: '+res.coord.lat+', '+res.coord.lon);
+
+                    console.log(res);
+                    }, 'json');
+                // don't forget to return false so the page doesn't refresh
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <form>
+        <label for="ciudad">City</label>
+        <input type="text" id="ciudad">
+        <button type="submit">Submit Query</button>
+    </form>
+    <h3 id="city"></h3>
+    <h3 id="temp"></h3>
+    <h3 id="coor"></h3>
+</body>
+</html>
